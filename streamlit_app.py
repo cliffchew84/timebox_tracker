@@ -45,8 +45,10 @@ st.write("""
     My name is Cliff, and this is my prototype to track my timeboxing efforts, 
     The entire prototype and its workflow, from the Google Calendar and Sheets API 
     calls, data processing to the frontend (what you are seeing now) is written in Python.
-    If you are interested, please visit my blog (coming soon). 
-    Best viewed on desktop.
+    If you are interested, please visit my blog at https://cliffy-gardens.medium.com/, 
+    where I will be posting updates about my life experiments, including this!
+    This web app is best viewed on desktop. The charts might look squashed when it is viewed 
+    from the cell phone portrait mode.
 """)
 
 extraction_time = "-".join(str(datetime.now()).split(".")[0].split("-")[1:])
