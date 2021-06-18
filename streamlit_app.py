@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import os
 import tempfile
 from datetime import datetime
 import pygsheets
@@ -12,7 +11,7 @@ import plotly.graph_objects as go
 st.set_page_config(layout="wide")
 
 # Authenticate into Google Sheets
-json_encode = os.environ['g_cred'].replace("\\\\", "\\").encode('utf-8')
+json_encode = st.secrets['g_cred'].replace("\\\\", "\\").encode('utf-8')
 
 def _google_creds_as_file():
     temp = tempfile.NamedTemporaryFile()
