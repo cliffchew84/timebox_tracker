@@ -109,8 +109,8 @@ for col in x:
 
 dbar.update_yaxes(type='category')
 dbar.update_xaxes(tick0=0, dtick=4)
-dbar.add_vline(x=8, line_width=1, line_dash="dash")
-dbar.add_vline(x=16, line_width=1, line_dash="dash")
+dbar.add_vline(x=8, line_width=2, line_dash="dash")
+dbar.add_vline(x=16, line_width=2, line_dash="dash")
 dbar.update_layout(
     barmode="stack", 
     hovermode="y unified", 
@@ -171,8 +171,8 @@ for col in x:
 
 wbar.update_yaxes(type='category')
 wbar.update_xaxes(tick0=0, dtick=4)
-wbar.add_vline(x=8, line_width=1, line_dash="dash")
-wbar.add_vline(x=16, line_width=1, line_dash="dash")
+wbar.add_vline(x=8, line_width=2, line_dash="dash")
+wbar.add_vline(x=16, line_width=2, line_dash="dash")
 wbar.update_layout(
     barmode="stack", 
     hovermode="y unified", 
