@@ -2,11 +2,11 @@
 # coding: utf-8
 
 import tempfile
-from datetime import datetime
 import pygsheets
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
+from datetime import datetime, timedelta
 
 st.set_page_config(layout="wide")
 
@@ -51,7 +51,8 @@ st.write("""
     from the cell phone portrait mode.
 """)
 
-extraction_time = "-".join(str(datetime.now()).split(".")[0].split("-")[1:])
+extraction_time = "-".join(str(datetime.now() + timedelta(hours=8)
+                                ).split(".")[0].split("-")[1:])
 
 # Daily hours spent
 col1, col2 = st.beta_columns([1, 5])
@@ -60,7 +61,8 @@ col1.subheader('Last updated')
 col1.write(extraction_time)
 if col1.button('Refresh Data'):
     dview, wview, lview = pull_data()
-    extraction_time = "-".join(str(datetime.now()).split(".")[0].split("-")[1:])
+    extraction_time = "-".join(str(datetime.now() + timedelta(hours=8)
+                                ).split(".")[0].split("-")[1:])
 
 col1.subheader('Daily Hours Spent')
 weeks = col1.multiselect(
