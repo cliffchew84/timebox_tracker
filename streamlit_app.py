@@ -37,22 +37,24 @@ def pull_data():
 
     return dview, wview, lview
 
-dview, wview, lview = pull_data()
+def get_current_datetime():
+    return "-".join(
+        str(datetime.now() + timedelta(hours=8)
+        ).split(".")[0].split("-")[1:])
 
 # Start of UI
 st.title("Tracking My Activities")
 st.write("""
-    My name is Cliff, and this is my prototype to track my timeboxing efforts, 
-    The entire prototype and its workflow, from the Google Calendar and Sheets API 
-    calls, data processing to the frontend (what you are seeing now) is written in Python.
+    My name is Cliff, and this is web app to track my timeboxing efforts, 
+    The entire app, from the Google Calendar and Sheets API calls, 
+    data processing to the Streamlit frontend (what you see here) is written in Python.
     If you are interested, please visit my blog at https://cliffy-gardens.medium.com/, 
     where I will be posting updates about my life experiments, including this!
-    This web app is best viewed on desktop. The charts might look squashed when it is viewed 
-    from the cell phone portrait mode.
+    This web app is best viewed on the desktop.
 """)
 
-extraction_time = "-".join(str(datetime.now() + timedelta(hours=8)
-                                ).split(".")[0].split("-")[1:])
+dview, wview, lview = pull_data()
+extraction_time = get_current_datetime()
 
 # Daily hours spent
 col1, col2 = st.beta_columns([1, 5])
@@ -61,8 +63,7 @@ col1.subheader('Last updated')
 col1.write(extraction_time)
 if col1.button('Refresh Data'):
     dview, wview, lview = pull_data()
-    extraction_time = "-".join(str(datetime.now() + timedelta(hours=8)
-                                ).split(".")[0].split("-")[1:])
+    extraction_time = get_current_datetime()
 
 col1.subheader('Daily Hours Spent')
 weeks = col1.multiselect(
@@ -132,21 +133,20 @@ dbar.update_layout(
 col2.plotly_chart(dbar, use_container_width=True)
 
 # Learning Table
-learning_style = dict()
+l_style = dict()
 
 for col in lview.columns.tolist():
     if col not in ['week', 'day', 'date']:
         lview[col] = lview[col].astype(float)
-        learning_style[col] = "{:.4}"
+        l_style[col] = "{:.4}"
         lview[col] = [str(i).replace('0.0', '.') for i in lview[col]]
 
 lview['date'] = ["-".join(i.split("-")[1:]) for i in lview['date']]
-
 del lview['week']
 
 ## Learning Table
 st.subheader("Past 14 Day Learnings")
-st.dataframe(lview.style.format(learning_style))
+st.dataframe(lview.style.format(l_style))
 
 ## Weekly aggregations
 for col in wview.columns.tolist():
@@ -178,7 +178,7 @@ wbar.update_layout(
     hovermode="y unified", 
     height=120 * len(wview['week'].unique()),
     title=dict(
-        text= "Weekly Hours Spent",
+        text= "Average Daily Hours Per Weekly",
         y=0.9,
         x=0.5,
         xanchor='center',
