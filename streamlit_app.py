@@ -133,12 +133,12 @@ dbar.update_layout(
 col2.plotly_chart(dbar, use_container_width=True)
 
 # Learning Table
-l_style = dict()
+learning_style = dict()
 
 for col in lview.columns.tolist():
     if col not in ['week', 'day', 'date']:
         lview[col] = lview[col].astype(float)
-        l_style[col] = "{:.4}"
+        learning_style[col] = "{:.4}"
         lview[col] = [str(i).replace('0.0', '.') for i in lview[col]]
 
 lview['date'] = ["-".join(i.split("-")[1:]) for i in lview['date']]
@@ -146,7 +146,7 @@ del lview['week']
 
 ## Learning Table
 st.subheader("Past 14 Day Learnings")
-st.dataframe(lview.style.format(l_style))
+st.dataframe(lview.style.format(learning_style))
 
 ## Weekly aggregations
 for col in wview.columns.tolist():
