@@ -70,7 +70,7 @@ weeks = col1.multiselect(
      "Select the weeks",
      tuple(set([str(i) for i in wview.week])))
 
-# Day View
+################################ Day View ################################
 for col in dview.columns.tolist():
     if col in ['week', 'date', 'day']:
         dview[col] = dview[col].astype(str)
@@ -132,7 +132,7 @@ dbar.update_layout(
 
 col2.plotly_chart(dbar, use_container_width=True)
 
-# Learning Table
+################################ Learning Table ################################
 learning_style = dict()
 
 for col in lview.columns.tolist():
@@ -144,11 +144,10 @@ for col in lview.columns.tolist():
 lview['date'] = ["-".join(i.split("-")[1:]) for i in lview['date']]
 del lview['week']
 
-## Learning Table
 st.subheader("Past 14 Day Learnings")
 st.dataframe(lview.style.format(learning_style))
 
-## Weekly aggregations
+################################ Weekly aggregations ################################
 for col in wview.columns.tolist():
     if col in ['week', 'start_week']:
         wview[col] = wview[col].astype(str)
