@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import os
 import tempfile
 import pygsheets
 import pandas as pd
@@ -11,7 +12,8 @@ from datetime import datetime, timedelta
 st.set_page_config(layout="wide")
 
 # Authenticate into Google Sheets
-json_encode = st.secrets['g_cred'].replace("\\\\", "\\").encode('utf-8')
+# json_encode = st.secrets['g_cred'].replace("\\\\", "\\").encode('utf-8')
+json_encode = os.environ['g_cred'].replace("\\\\", "\\").encode('utf-8')
 
 def _google_creds_as_file():
     temp = tempfile.NamedTemporaryFile()
@@ -132,21 +134,6 @@ dbar.update_layout(
 
 col2.plotly_chart(dbar, use_container_width=True)
 
-################################ Learning Table ################################
-learning_style = dict()
-
-for col in lview.columns.tolist():
-    if col not in ['week', 'day', 'date']:
-        lview[col] = lview[col].astype(float)
-        learning_style[col] = "{:.4}"
-        lview[col] = [str(i).replace('0.0', '.') for i in lview[col]]
-
-lview['date'] = ["-".join(i.split("-")[1:]) for i in lview['date']]
-del lview['week']
-
-st.subheader("Past 14 Day Learnings")
-st.dataframe(lview.style.format(learning_style))
-
 ################################ Weekly aggregations ################################
 for col in wview.columns.tolist():
     if col in ['week', 'start_week']:
@@ -156,7 +143,13 @@ for col in wview.columns.tolist():
 
 wview['y'] = "w" + wview['week'] + ' | ' + wview['start_week']
 
-y = wview.sort_values('week').y.values
+if weeks:
+    final_wview = wview[
+        wview.week.isin(weeks)].reset_index(drop=True)
+else:
+    final_wview = wview.copy()
+
+y = final_wview.sort_values('week').y.values
 
 wbar = go.Figure()
 for col in x:
@@ -175,20 +168,55 @@ wbar.add_vline(x=16, line_width=1, line_dash="dash")
 wbar.update_layout(
     barmode="stack", 
     hovermode="y unified", 
-    height=120 * len(wview['week'].unique()),
-    title=dict(
-        text= "Average Daily Hours Per Weekly",
-        y=0.9,
-        x=0.5,
-        xanchor='center',
-        yanchor='top'),
+    height=150,
     showlegend=False,
     margin=dict(
         l=10, #left margin
         r=10, #right margin
-        b=50, #bottom margin
-        t=50  #top margin
+        b=20, #bottom margin
+        t=20  #top margin
     )
 )
 
+st.subheader("Average Weekly Activities")
 st.plotly_chart(wbar, use_container_width=True)
+
+################################ Learning Table ################################
+learning_style = dict()
+
+for col in lview.columns.tolist():
+    if col not in ['week', 'day', 'date']:
+        lview[col] = lview[col].astype(float)
+        learning_style[col] = "{:.4}"
+        lview[col] = [str(i).replace('0.0', '.') for i in lview[col]]
+
+lview['date'] = ["-".join(i.split("-")[1:]) for i in lview['date']]
+del lview['week']
+
+st.subheader("Past 14 Day Learnings")
+
+t_views = list()
+for cols in lview.columns:
+    t_views.append(lview[cols])
+
+ltable = go.Figure(data=[go.Table(
+    header=dict(values=list(lview.columns),
+                line_color='#009688',
+                fill_color='#039BE5',
+                align='center'),
+    cells=dict(values=t_views,
+               line_color='darkslategray',
+               fill_color='lightcyan',
+               align='center'))
+])
+
+ltable.update_layout(
+    margin=dict(
+        l=10, #left margin
+        r=5, #right margin
+        b=0, #bottom margin
+        t=0  #top margin
+    )
+)
+
+st.plotly_chart(ltable, use_container_width=True)
