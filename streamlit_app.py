@@ -168,7 +168,7 @@ wbar.add_vline(x=16, line_width=1, line_dash="dash")
 wbar.update_layout(
     barmode="stack", 
     hovermode="y unified",
-    height=240,
+    height=220,
     showlegend=False,
     margin=dict(
         l=10, #left margin
