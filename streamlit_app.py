@@ -167,8 +167,8 @@ wbar.add_vline(x=8, line_width=1, line_dash="dash")
 wbar.add_vline(x=16, line_width=1, line_dash="dash")
 wbar.update_layout(
     barmode="stack", 
-    hovermode="y unified", 
-    height=150,
+    hovermode="y unified",
+    height=240,
     showlegend=False,
     margin=dict(
         l=10, #left margin
@@ -201,6 +201,7 @@ for cols in lview.columns:
 
 ltable = go.Figure(data=[go.Table(
     header=dict(values=list(lview.columns),
+                font=dict(color='white'),
                 line_color='#009688',
                 fill_color='#039BE5',
                 align='center'),
