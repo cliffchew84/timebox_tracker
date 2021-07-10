@@ -173,8 +173,8 @@ wbar.update_layout(
     margin=dict(
         l=10, #left margin
         r=10, #right margin
-        b=20, #bottom margin
-        t=20  #top margin
+        b=0, #bottom margin
+        t=0  #top margin
     )
 )
 
