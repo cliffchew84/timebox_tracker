@@ -12,8 +12,11 @@ from datetime import datetime, timedelta
 st.set_page_config(layout="wide")
 
 # Authenticate into Google Sheets
-json_encode = st.secrets['g_cred'].replace("\\\\", "\\").encode('utf-8')
-# json_encode = os.environ['g_cred'].replace("\\\\", "\\").encode('utf-8')
+if platform == "darwin":
+    json_encode = os.environ['g_cred'].replace("\\\\", "\\").encode('utf-8')
+
+else:
+    json_encode = st.secrets['g_cred'].replace("\\\\", "\\").encode('utf-8')
 
 def _google_creds_as_file():
     temp = tempfile.NamedTemporaryFile()
